@@ -23,11 +23,12 @@ const db = require('./db'); // Aquí importamos la conexión a la base de datos
 // Middleware
 app.use(
   cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
+    origin: process.env.CLIENT_URL || '*', // Permite conexiones desde el frontend desplegado
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Agrega más métodos si son necesarios
+    allowedHeaders: ['Content-Type', 'Authorization'], // Asegúrate de incluir `Authorization` si usas JWT
   })
 );
+
 app.use(bodyParser.json());
 
 // Conectar a la base de datos (esto ya está configurado en db.js, no es necesario volver a hacerlo)
@@ -102,5 +103,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Inicia el servidor
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT} or ${process.env.RENDER_EXTERNAL_URL}`);
+
 });
